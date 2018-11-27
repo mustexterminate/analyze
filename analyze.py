@@ -31,7 +31,7 @@ def main():
                 neg_dict.append(t)
     f.close()
     
-    f = open('./1155123051.txt', encoding="utf8")
+    f = open('./1155086529.txt', 'r')
     
     for line in f:
         t = line.strip().lower();
@@ -40,19 +40,21 @@ def main():
             comment_dict.append(t)
     f.close()
 
-    #analysis_for_pos = []
-    #for i in range(len(Bing_senti)):
-    #    tokens = nltk.word_tokenize(pos_content[i])
-    #    neg_cnt = 0
-    #   pos_cnt = 0
-    #    for neg in dict_neg:
-    #        if (neg in tokens):
-    #            neg_cnt = neg_cnt +1
-    #    for pos in dict_pos:
-    #        if (pos in tokens):
-    #            pos_cnt = pos_cnt +1
-    #    analysis_for_pos.append(pos_cnt - neg_cnt)     
-    #   Bing_senti['Bing_analysis_for_pos'] = analysis_for_pos
+    print(comment_dict)
     
+    analysis = []
+    for i in range(len(comment_dict)):
+        tokens = nltk.word_tokenize(comment_dict[i])
+        neg_cnt = 0
+        pos_cnt = 0
+        for neg in neg_dict:
+            if (neg in tokens):
+                neg_cnt = neg_cnt +1
+        for pos in pos_dict:
+            if (pos in tokens):
+                pos_cnt = pos_cnt +1
+        analysis.append(pos_cnt - neg_cnt)     
+    
+    print(analysis)
 if __name__ == '__main__':
     main()
