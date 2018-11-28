@@ -1,6 +1,7 @@
 import re
 import os
 import string
+import glob
 import nltk
 
 
@@ -30,37 +31,40 @@ def main():
             if (isNotNull(t)):
                 neg_dict.append(t)
     f.close()
-    
-    f = open('./1155123051.txt', encoding="utf8")
-    
-    for line in f:
-        t = line.strip().lower();
-        t = re.sub(r'[^\w\s]','',t)
-        if (isNotNull (t)):
-            comment_dict.append(t)
-    f.close()
 
-    print(comment_dict)
-    
-    analysis = []
-    for i in range(len(comment_dict)):
-        tokens = nltk.word_tokenize(comment_dict[i])
-        neg_cnt = 0
-        pos_cnt = 0
+    file_names = glob.glob("1155*")
+    i = 0
+    for file_name in file_names:
+        analysis = []
+        comment_dict = []
+        
+        with open(file_name) as f:
+            print('File ', file_name, ':')
+            for line in f:
+                t = line.strip().lower();
+                t = re.sub(r'[^\w\s]','',t)
+                if (isNotNull (t)):
+                    comment_dict.append(t)
+            f.close()
+            
+            for i in range(len(comment_dict)):
+                tokens = nltk.word_tokenize(comment_dict[i])
+                neg_cnt = 0
+                pos_cnt = 0
 
-        neg_word=[]
-        pos_word=[]
-        for neg in neg_dict:
-            if (neg in tokens):
-                neg_cnt = neg_cnt +1
-                neg_word.append(neg)
-        for pos in pos_dict:
-            if (pos in tokens):
-                pos_cnt = pos_cnt +1
-                pos_word.append(pos)
-        analysis.append(pos_cnt - neg_cnt)     
-        print('Loop', i, ' negative words matched: ',  neg_word)
-        print('Loop', i, ' positive words matched: ', pos_word)
-    print(analysis)
+                neg_word=[]
+                pos_word=[]
+                for neg in neg_dict:
+                    if (neg in tokens):
+                        neg_cnt = neg_cnt +1
+                        neg_word.append(neg)
+                for pos in pos_dict:
+                    if (pos in tokens):
+                        pos_cnt = pos_cnt +1
+                        pos_word.append(pos)
+                analysis.append(pos_cnt - neg_cnt)     
+                print('Comment', i, ' negative words matched: ',  neg_word)
+                print('Comment', i, ' positive words matched: ', pos_word)
+            print(analysis)
 if __name__ == '__main__':
     main()
